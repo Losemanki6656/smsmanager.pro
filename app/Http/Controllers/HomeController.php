@@ -326,7 +326,10 @@ class HomeController extends Controller
 
     public function delete_department(Request $request)
     {
-        $deps = Department::find($request->department_id)->delete();
+        $departments = Cadry::where('department_id', $request->department_id)->count();
+
+        if($departments == 0)
+             $deps = Department::find($request->department_id)->delete();
         
         return redirect()->back()->with('msg' ,1);
     }
@@ -380,7 +383,10 @@ class HomeController extends Controller
 
     public function deletenumber(Request $request)
     {
-        Numbers::find($request->iduserdelete)->delete();
+        $number = Department::where('number_id', $request->number_id)->count();
+
+        if($number == 0)
+            Numbers::find($request->iduserdelete)->delete();
 
         return redirect()->back()->with('msg' ,1);
     }
@@ -406,7 +412,10 @@ class HomeController extends Controller
 
     public function delete_organization(Request $request)
     {
-        Organization::find($request->organization_id)->delete();
+        $organizations = Department::where('organization_id', $request->organization_id)->count();
+
+        if($organizations == 0)
+            Organization::find($request->organization_id)->delete();
 
         return redirect()->back()->with('msg' ,1);
     }
