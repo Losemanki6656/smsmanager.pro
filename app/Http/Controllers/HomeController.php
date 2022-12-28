@@ -39,11 +39,11 @@ class HomeController extends Controller
     {
        
             $cadry = Cadry::query()
-            ->when(\Request::input('search'),function ($query,$search){
-                $query->where(function ($query) use ($search) {
-                    $query->where('fullname', 'like', "%$search%");
-                });
-            })->orderBy('created_at','ASC');
+                ->when(\Request::input('search'),function ($query,$search){
+                    $query->where(function ($query) use ($search) {
+                        $query->where('fullname', 'like', "%$search%");
+                    });
+                })->with(['department','number'])->orderBy('created_at','ASC');
             $departments = Department::all();
 
             return view('home',[

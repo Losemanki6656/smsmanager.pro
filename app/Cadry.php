@@ -15,6 +15,6 @@ class Cadry extends Model
 
     public function department()
     {
-        return $this->belongsTo(Numbers::class,'department_id');
+        return $this->belongsTo(Department::class,'department_id');
     }
 }
