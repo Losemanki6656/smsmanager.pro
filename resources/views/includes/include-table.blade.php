@@ -24,10 +24,10 @@
                     <td class="text-center">{{ $item->passport }}</td>
                     <td class="text-center">{{ $item->stativ }}</td>
                     <td class="text-center">{{ $item->rad }}</td>
-                    <td class="text-center">{{ $item->meto }}</td>
+                    <td class="text-center">{{ $item->mesto }}</td>
                     <td class="text-center">{{ $item->last_date->format('d-m-Y') }}</td>
                     <td class="text-center">{{ $item->next_date->format('d-m-Y') }}</td>
-                    <td class="text-center">{{ $item->department->name ?? '' }}</td>
+                    <td class="text-center">{{ $item->department->fullname ?? '' }}</td>
                     <td class="text-center">{{ $item->phone }}</td>
                     <td class="text-center">
                         @if ($item->next_date > now())
