@@ -49,7 +49,7 @@
                                         <select class="form-control" name="organization_id" style="width: 100%;"
                                             required>
                                             @foreach ($organizations as $organization)
-                                                <option value="{{ $number->id }}"
+                                                <option value="{{ $organization->id }}"
                                                     @if ($organization->id == $item->organization_id) selected @endif>
                                                     {{ $organization->name }}</option>
                                             @endforeach
