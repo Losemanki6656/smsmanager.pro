@@ -32,14 +32,14 @@
                     <td class="text-center">
                         @if ($item->next_date > now())
                             @if ($item->next_date->diffInDays() + 1 > 5)
-                                <span class="badge badge-primary"> {{ $item->next_date->diffInDays() + 1 }} days
-                                    left</span>
+                                <span class="badge badge-primary"> {{ $item->next_date->diffInDays() + 1 }} дней
+                                    осталось </span>
                             @else
-                                <span class="badge badge-warning"> {{ $item->next_date->diffInDays() + 1 }} days
-                                    left</span>
+                                <span class="badge badge-warning"> {{ $item->next_date->diffInDays() + 1 }} дней
+                                    осталось </span>
                             @endif
                         @else
-                            <span class="badge badge-danger">Expired<span class="ms-1 fas fa-ban"
+                            <span class="badge badge-danger">Истек <span class="ms-1 fas fa-ban"
                                     data-fa-transform="shrink-2"></span></span>
                         @endif
                     </td>
@@ -66,32 +66,32 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalCenterTitle">Success User</h5>
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Реле</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                             aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <input type="hidden" name="idrelay" value="{{ $item->id }}">
+                                        <input type="hidden" name="cadry_id" value="{{ $item->id }}">
                                         <input type="text" class="form-control" value="{{ $item->fullname }}"
                                             readonly style="width: 100%;" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="organization_phone">Next Date</label>
+                                        <label for="organization_phone">След. Дата</label>
                                         <input type="date" class="form-control" name="next_date"
                                             value="{{ $item->next_date->addYear()->format('Y-m-d') }}" required
                                             style="width: 100%;">
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="organization_phone">Comment</label>
+                                        <label for="organization_phone">Комментария</label>
                                         <textarea name="comment" class="form-control" style="width: 100%;"></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn  btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn  btn-success">Submit </button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"> Отиена
+                                    </button>
+                                    <button type="submit" class="btn  btn-success"> Сохранить </button>
                                 </div>
                             </div>
                         </div>
@@ -105,45 +105,79 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalCenterTitle">Edit User</h5>
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Редактировать реле</h5>
                                     <button type="button" class="close" data-dismiss="modal"
                                         aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <input type="hidden" name="iduseredit" value="{{ $item->id }}">
-                                        <label for="edtname">Fullname</label>
-                                        <input type="text" class="form-control" id="editname" name="nameedit"
+                                        <input type="hidden" name="cadry_id" value="{{ $item->id }}">
+                                        <label for="edtname">Наиминование Реле</label>
+                                        <input type="text" class="form-control" name="fullname"
                                             value="{{ $item->fullname }}" style="width: 100%;" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="organization_phone">Department</label>
+                                        <label for="organization_phone">Станция</label>
                                         <select class="form-control" name="department_id" style="width: 100%;"
                                             required>
                                             @foreach ($departments as $department)
                                                 <option value="{{ $department->id }}"
                                                     @if ($item->department_id == $department->id) selected @endif>
-                                                    {{ $department->fullname }}</option>
+                                                    {{ $department->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="organization_phone"> Last Date</label>
-                                        <input type="date" class="form-control" name="last_date"
-                                            value="{{ $item->last_date->format('Y-m-d') }}" required
-                                            style="width: 100%;">
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <label>Пасспорт</label>
+                                            <input type="text" class="form-control" name="passport"
+                                                placeholder="Пасспорт" style="width: 100%;"
+                                                value="{{ $item->passport }}" required>
+                                        </div>
+                                        <div class="col">
+                                            <label>Статив</label>
+                                            <input type="text" class="form-control" name="stativ"
+                                                placeholder="Статив" style="width: 100%;"
+                                                value="{{ $item->stativ }}" required>
+                                        </div>
+
                                     </div>
-                                    <div class="form-group">
-                                        <label for="organization_phone"> Next Date</label>
-                                        <input type="date" class="form-control" name="next_date"
-                                            value="{{ $item->next_date->format('Y-m-d') }}" required
-                                            style="width: 100%;">
+                                    <div class="form-group row">
+
+                                        <div class="col">
+                                            <label>Ряд</label>
+                                            <input type="text" class="form-control" name="rad"
+                                                placeholder="Ряд" style="width: 100%;" value="{{ $item->rad }}"
+                                                required>
+                                        </div>
+                                        <div class="col">
+                                            <label>Место</label>
+                                            <input type="text" class="form-control" name="mesto"
+                                                placeholder="Место" style="width: 100%;" value="{{ $item->mesto }}"
+                                                required>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <label for="organization_phone"> Пред. Дата</label>
+                                            <input type="date" class="form-control" name="last_date"
+                                                value="{{ $item->last_date->format('Y-m-d') }}" required
+                                                style="width: 100%;">
+                                        </div>
+                                        <div class="col">
+                                            <label for="organization_phone"> След. Дата</label>
+                                            <input type="date" class="form-control" name="next_date"
+                                                value="{{ $item->next_date->format('Y-m-d') }}" required
+                                                style="width: 100%;">
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn  btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn  btn-success">Submit </button>
+                                        data-dismiss="modal">Отиена</button>
+                                    <button type="submit" class="btn  btn-success"> Сохранить </button>
                                 </div>
                             </div>
                         </div>
@@ -157,25 +191,25 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalCenterTitle">Delete User</h5>
+                                    <h5 class="modal-title" id="exampleModalCenterTitle"> Удалить Реле </h5>
                                     <button type="button" class="close" data-dismiss="modal"
                                         aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <input type="hidden" name="iduserdelete" value="{{ $item->id }}">
+                                        <input type="hidden" name="cadry_id" value="{{ $item->id }}">
                                         <h4><code> {{ $item->fullname }} </code></h4>
                                     </div>
                                     <div class="form-group">
                                         <h4>
-                                            Do you really want to delete?
+                                            Вы действительно хотите удалить?
                                         </h4>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn  btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn  btn-danger">Delete </button>
+                                        data-dismiss="modal"> Отиена</button>
+                                    <button type="submit" class="btn  btn-danger"> Сохранить </button>
                                 </div>
                             </div>
                         </div>
@@ -189,25 +223,25 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalCenterTitle">Send Message</h5>
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Отправить СМС</h5>
                                     <button type="button" class="close" data-dismiss="modal"
                                         aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <input type="hidden" name="idusersend" value="{{ $item->id }}">
-                                        <input type="hidden" name="phonesenduser" value="{{ $item->phone }}">
+                                        <input type="hidden" name="cadry_id" value="{{ $item->id }}">
+                                        <input type="hidden" name="phone" value="{{ $item->phone }}">
                                         <h5><code> to:</code> {{ $item->fullname }}</h5>
                                     </div>
                                     <div class="form-group">
-                                        <label for="textmessage">Text Message</label>
+                                        <label for="textmessage">ТехТ</label>
                                         <textarea name="textmessage" class="form-control" id="textmessage" style="width: 100%" required></textarea>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn  btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn  btn-success">Submit </button>
+                                        data-dismiss="modal">Отиена</button>
+                                    <button type="submit" class="btn  btn-success"> Отправить </button>
                                 </div>
                             </div>
                         </div>

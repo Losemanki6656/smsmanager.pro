@@ -4,7 +4,8 @@
             <tr>
                 <th width="60"><span>№</span></th>
                 <th><span>Участка</span></th>
-                <th class="text-center" width="150"><span>Действие</span></th>
+                <th><span>Количество Реле</span></th>
+                <th class="text-center" width="380"><span>Действие</span></th>
             </tr>
         </thead>
         <tbody>
@@ -12,12 +13,14 @@
                 <tr>
                     <td>{{ $loop->index + 1 }}</td>
                     <td>{{ $item->name }}</td>
+                    <td>{{ $item->relays->count() }}</td>
                     <td>
-                        <button type="button" class="btn btn-icon btn-outline-secondary" title="Edit" data-toggle="modal"
-                            data-target="#editmodal{{ $item->id }}"><i class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-icon btn-outline-danger" title="Delete"
+                        <a href="/" type="button" class="btn btn-sm btn-icon btn-outline-primary"><i class="fa fa-eye"></i> Просмотр </a>
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" title="Edit" data-toggle="modal"
+                            data-target="#editmodal{{ $item->id }}"><i class="fa fa-edit"></i> Редактировать</button>
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-danger" title="Delete"
                             data-toggle="modal" data-target="#deletemodal{{ $item->id }}"><i
-                                class="fa fa-trash-alt"></i></button>
+                                class="fa fa-trash-alt"></i> Удалить</button>
                     </td>
                 </tr>
 

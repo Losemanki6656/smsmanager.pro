@@ -37,18 +37,21 @@ class HomeController extends Controller
      */
     public function index()
     {
-       
             $cadry = Cadry::query()
                 ->when(\Request::input('search'),function ($query,$search){
                     $query->where(function ($query) use ($search) {
                         $query->where('fullname', 'like', "%$search%");
                     });
                 })->with(['department','number'])->orderBy('created_at','ASC');
+
             $departments = Department::all();
+            $numbers = Numbers::all();
+
 
             return view('home',[
                 'cadry' => $cadry->paginate(10),
-                'departments' => $departments
+                'departments' => $departments,
+                'numbers' => $numbers
             ]);
     }
 
@@ -127,79 +130,39 @@ class HomeController extends Controller
 
     public function success_user(Request $request)
     {
-        $x = UserRole::where('user_id',Auth::user()->id)->value('role_id');
-
-        if($x == 1)
-        {
-            $user = Cadry::find($request->idrelay);
+    
+            $user = Cadry::find($request->cadry_id);
             $user->last_date = now();
             $user->next_date = $request->next_date;
             $user->save();
 
              $comments = new CommentRelay();
-             $comments->user_id = $request->idrelay;
+             $comments->user_id = $request->cadry_id;
              $comments->comment = $request->comment;
              $comments->save();
-        }
-        else if($x == 2)
-        {
-            $user = Relay::find($request->iduser);
-            $user->date_vacation = $request->date_vacation;
-            $user->save();
-
-            $comments = new CommentRelay();
-            $comments->user_id = $request->iduser;
-            $comments->comment = $request->commentrelay;
-            $comments->save();
-        }
-        else
-        if ($x == 3)
-        {
-            $user = Tb::find($request->iduser);
-            $user->date_vacation = $request->date_vacation;
-            $user->save(); 
-        }
-       
 
         return redirect()->back()->with('msg' ,1);
     }
 
     public function edit_user(Request $request)
     {
-        $x = UserRole::where('user_id',Auth::user()->id)->value('role_id');
-
-        if($x == 1)
-        {
-           // dd(Numbers::find($request->department_id)->numbers;);
-            $user = Cadry::find($request->iduseredit);
-            $user->fullname = $request->nameedit;
-            $user->department_id = $request->department_id;
-            $user->phone = Numbers::find($request->department_id)->numbers;
-            $user->last_date = $request->last_date;
-            $user->next_date = $request->next_date;
-            $user->save();
-        }
-        else
-        if($x == 2)
-        {
-            $user = Relay::find($request->iduseredit);
-            $user->fullname = $request->nameedit;
-            $user->department = $request->departmentedit;
-            $user->date_pos = $request->date_pos_relay;
-            $user->date_vacation = $request->date_vac;
-            $user->save();
-        }
-        else
-        if($x == 3)
-        {
-            $user = Tb::find($request->iduseredit);
-            $user->fullname = $request->nameedit;
-            $user->department = $request->departmentedit;
-            $user->phone = $request->phone2;
-            $user->date_vacation = $request->date_vac;
-            $user->save();
-        }
        
+        $dep = Department::with('number')->find($request->department_id);
+        
+        $cadry = Cadry::find($request->cadry_id);
+        $cadry->fullname = $request->fullname;
+        $cadry->organization_id = $dep->organization_id;
+        $cadry->number_id = $dep->number_id;
+        $cadry->department_id = $request->department_id;
+        $cadry->phone = $dep->number->phone;
+        $cadry->last_date = $request->last_date;
+        $cadry->next_date = $request->next_date;
+        $cadry->passport = $request->passport;
+        $cadry->stativ = $request->stativ;
+        $cadry->rad = $request->rad;
+        $cadry->mesto = $request->mesto;
+        $cadry->save();
+     
 
         return redirect()->back()->with('msg' ,1);
     }
@@ -215,59 +178,22 @@ class HomeController extends Controller
 
     public function delete_user(Request $request)
     {
-        $x = UserRole::where('user_id',Auth::user()->id)->value('role_id');
+   
+        Cadry::find($request->cadry_id)->delete();  
 
-        if($x == 1)
-        {
-            Cadry::find($request->iduserdelete)->delete();  
-            Archive::where('user_id',$request->iduserdelete)->delete();  
-        }
-        else
-        if($x == 2)
-        {
-             Relay::find($request->iduserdelete)->delete();  
-             CommentRelay::where('user_id',$request->iduserdelete)->delete();  
-             ArchiveRelay::where('user_id',$request->iduserdelete)->delete();  
-            
-        }
-        else 
-        if($x == 3)
-        {
-            Tb::find($request->iduserdelete)->delete();  
-            ArchiveTb::where('user_id',$request->iduserdelete)->delete(); 
-        }
-        
+        Archive::where('user_id',$request->cadry_id)->delete();  
 
         return redirect()->back()->with('msg' ,1);
     }
+
     public function archive()
     {
-        $x = UserRole::where('user_id',Auth::user()->id)->value('role_id');
-        
-        if($x == 1)
-        {
+    
             $archive = Archive::with('cadry')->orderBy('created_at','DESC')->get();
+
             return view('archive',[
                 'archive' => $archive
-            ]);
-        } else
-        if($x == 2)
-        {
-            $archive = ArchiveRelay::with('cadry')->get();
-
-            return view('archiverelay',[
-                'archive' => $archive
-            ]);
-        }
-        else 
-        if($x == 3)
-        {
-            $archive = ArchiveTb::with('cadry')->get();
-
-            return view('archivetb',[
-                'archive' => $archive
-            ]); 
-        }        
+            ]);       
     }
 
     public function numbers(Request $request)
@@ -277,7 +203,7 @@ class HomeController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('fullname', 'like', "%$search%");
                 });
-            })->get();
+            })->with('relays')->get();
 
         return view('numbers',[
             'numbers' => $numbers
@@ -294,7 +220,7 @@ class HomeController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('fullname', 'like', "%$search%");
                 });
-            })->with(['organization','number'])->get();
+            })->with(['organization','number','relays'])->get();
 
         return view('departments',[
             'departments' => $departments,
@@ -342,7 +268,7 @@ class HomeController extends Controller
                 $query->where(function ($query) use ($search) {
                     $query->where('fullname', 'like', "%$search%");
                 });
-            })->get();
+            })->with('relays')->get();
             
         return view('organizations',[
             'organizations' => $organizations
@@ -422,10 +348,7 @@ class HomeController extends Controller
 
     public function send_message(Request $request)
     {
-        $x = UserRole::where('user_id',Auth::user()->id)->value('role_id');
-        
-        if($x == 1)
-        {
+    
             $token = Sms::find(1)->token;
 
             $msg = 0;
@@ -433,10 +356,10 @@ class HomeController extends Controller
             $replace = ['', '', '','',''];
             $x = "";
     
-            $phone = str_replace($char, $replace, $request->phonesenduser);
+            $phone = str_replace($char, $replace, $request->phone);
     
             $text = $request->textmessage; 
-            $id = $request->idusersend;
+            $id = $request->cadry_id;
     
             $curl = curl_init();
             
@@ -477,7 +400,6 @@ class HomeController extends Controller
                 $edit_token = $this->smstoken();
                 //dd($edit_token);
             }
-        }
       
 
         return redirect()->back()->with('msg' ,$msg);

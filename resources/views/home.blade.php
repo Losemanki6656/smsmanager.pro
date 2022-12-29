@@ -21,11 +21,25 @@
                             <input type="text" class="form-control" name="search"
                                 value="{{ request()->query('search') }}" placeholder="Поиск ...">
                         </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <select name="" id="" class="form-control">
+                                @foreach ($departments as $dep)
+                                    <option value="{{ $dep->id }}">{{ $dep->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <select name="" id="" class="form-control">
+                                @foreach ($numbers as $num)
+                                    <option value="{{ $num->id }}">{{ $num->fullname }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <button type="button" class="btn  btn-primary mb-2" data-toggle="modal"
                             data-target="#exampleModalCenter"><i class="fa fa-plus mr-2"></i> Добавить реле
                         </button>
                         <a type="button" href="{{ route('filter') }}" class="btn  btn-danger mb-2 ml-2"><i
-                                class="fa fa-filter mr-2"></i>Филтер</a>
+                                class="fa fa-filter mr-2"></i> Филтер</a>
                     </div>
                 </form>
 

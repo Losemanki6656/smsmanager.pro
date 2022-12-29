@@ -15,4 +15,11 @@ class Department extends Model
     {
         return $this->belongsTo(Numbers::class,'number_id');
     }
+
+    public function relays()
+    {
+        return $this->hasMany( Cadry::class, 'department_id');
+    }
+
+    
 }
