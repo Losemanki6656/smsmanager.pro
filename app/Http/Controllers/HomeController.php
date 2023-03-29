@@ -39,10 +39,25 @@ class HomeController extends Controller
     {
             $cadry = Cadry::query()
                 ->when(\Request::input('search'),function ($query,$search){
-                    $query->where(function ($query) use ($search) {
-                        $query->where('fullname', 'like', "%$search%");
-                    });
-                })->with(['department','number'])->orderBy('created_at','ASC');
+                     $query->where('fullname', 'like', "%$search%")
+                        ->orWhere('passport', 'like', "%$search%");
+                })
+                ->when(\Request::input('num_id'),function ($query,$num_id){
+                    $query->where('number_id', $num_id);
+                })
+                ->when(\Request::input('dep_id'),function ($query,$dep_id){
+                        $query->where('department_id', $dep_id);
+                })
+                ->when(\Request::input('stativ'),function ($query,$stativ){
+                    $query->where('stativ', 'like', "%$stativ%");
+                })
+                ->when(\Request::input('rad'),function ($query,$rad){
+                    $query->where('rad', 'like', "%$rad%");
+                })
+                ->when(\Request::input('mesto'),function ($query,$mesto){
+                    $query->where('mesto', 'like', "%$mesto%");
+                })
+                ->with(['department','number'])->orderBy('next_date','ASC');
 
             $departments = Department::all();
             $numbers = Numbers::all();
@@ -95,6 +110,9 @@ class HomeController extends Controller
 
     public function smstoken()
     {
+        // "email": "bbiznestg@gmail.com",
+        // "password": "sgiBsoQEyLKsh71Z3ikVLhh8LtzI66ntvDm47J13"
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'http://notify.eskiz.uz/api/auth/login',
@@ -106,8 +124,8 @@ class HomeController extends Controller
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
         CURLOPT_POSTFIELDS =>'{
-            "email": "bbiznestg@gmail.com",
-            "password": "sgiBsoQEyLKsh71Z3ikVLhh8LtzI66ntvDm47J13"
+            "email": "lok-depo-bukhara@mail.ru",
+            "password": "GmQdMVI4nr3K4ZQ2VvZ871Tlu5DNA8ZKBVcCc0yQ"
         }
         ',
         CURLOPT_HTTPHEADER => array(
@@ -119,10 +137,17 @@ class HomeController extends Controller
         $json = json_decode($response, true);
         $x = $json['data'];
       
-        $smstoken = Sms::find(1);
-        $smstoken->token = $x['token'];
-        $smstoken->save();
-        //dd($response);
+        $sms = Sms::count();
+        if($sms) {
+            $smstoken = Sms::find(1);
+            $smstoken->token = $x['token'];
+            $smstoken->save();
+        } else {
+            $smstoken = new Sms();
+            $smstoken->token = $x['token'];
+            $smstoken->save();
+        }
+        
         curl_close($curl);
 
         return 'success';
@@ -218,7 +243,7 @@ class HomeController extends Controller
         $departments = Department::query()
             ->when(\Request::input('search'),function ($query,$search){
                 $query->where(function ($query) use ($search) {
-                    $query->where('fullname', 'like', "%$search%");
+                    $query->where('name', 'like', "%$search%");
                 });
             })->with(['organization','number','relays'])->get();
 
@@ -348,8 +373,15 @@ class HomeController extends Controller
 
     public function send_message(Request $request)
     {
+        $tok=Sms::first();
     
-            $token = Sms::find(1)->token;
+        if($tok)
+            $token = $tok->token;
+        else {
+            $this->smstoken();
+            $tok=Sms::first();
+            $token = $tok->token;
+        };
 
             $msg = 0;
             $char = ['(', ')', ' ','-','+'];
@@ -398,7 +430,47 @@ class HomeController extends Controller
             else
             {
                 $edit_token = $this->smstoken();
-                //dd($edit_token);
+
+                $tok=Sms::first();
+    
+                if($tok)
+                    $token = $tok->token;
+                else $this->smstoken();
+
+                $curl = curl_init();
+            
+                curl_setopt_array($curl, array(
+                CURLOPT_URL => 'http://notify.eskiz.uz/api/message/sms/send-batch',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS =>"{ \"messages\":[ {\"user_sms_id\":\"$id\",\"to\": \"$phone\",\"text\": \"$text\"} ],\"from\":\"4546\",\"dispatch_id\":\"123\"}",
+                CURLOPT_HTTPHEADER => array(
+                    'Authorization: Bearer '.$token,
+                    'Content-Type: application/json'
+                ),
+                ));
+        
+                $response = curl_exec($curl);
+        
+                $err = curl_error($curl);
+                curl_close($curl);
+                $json = json_decode($response, true);
+    
+                if($json['status'] == "success")
+                {
+                    $msg = 1;
+        
+                    $archive = new Archive();
+                    $archive->user_id = $id;
+                    $archive->text_message = $request->textmessage;
+                    $archive->status = 1;
+                    $archive->save();
+                }
             }
       
 

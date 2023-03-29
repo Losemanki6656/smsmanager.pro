@@ -10,6 +10,49 @@
         @endif
     @endif
 
+    @push('scripts')
+        <script>
+            function filter() {
+                let search = $('#search').val();
+                let dep_id = $('#dep_id').val();
+                let num_id = $('#num_id').val();
+                let stativ = $('#stativ').val();
+                let rad = $('#rad').val();
+                let mesto = $('#mesto').val();
+
+                let url = '{{ route('home') }}';
+                window.location.href = `${url}?search=${search}&dep_id=${dep_id}&num_id=${num_id}&stativ=${stativ}&rad=${rad}&mesto=${mesto}`;
+            }
+
+            $('#search').keyup(function(e) {
+                if (e.keyCode == 13) {
+                    filter();
+                }
+            })
+            $('#stativ').keyup(function(e) {
+                if (e.keyCode == 13) {
+                    filter();
+                }
+            })
+            $('#rad').keyup(function(e) {
+                if (e.keyCode == 13) {
+                    filter();
+                }
+            })
+            $('#mesto').keyup(function(e) {
+                if (e.keyCode == 13) {
+                    filter();
+                }
+            })
+            $('#dep_id').change(function(e) {
+                filter();
+            })
+            $('#num_id').change(function(e) {
+                filter();
+            })
+        </script>
+    @endpush
+
     <div class="col">
         <div class="card table-card">
             <div class="card-header">
@@ -18,28 +61,44 @@
                     @csrf
                     <div class="form-inline">
                         <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control" name="search"
-                                value="{{ request()->query('search') }}" placeholder="Поиск ...">
+                            <input type="text" class="form-control" name="search" id="search"
+                                value="{{ request('search') }}" placeholder="Имя или паспорт ...">
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
-                            <select name="" id="" class="form-control">
+                            <input type="text" class="form-control"  id="stativ"
+                                value="{{ request('stativ') }}" placeholder="СТАТИВ ...">
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control" id="rad"
+                                value="{{ request('rad') }}" placeholder="РЯД ...">
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <input type="text" class="form-control" id="mesto"
+                                value="{{ request('mesto') }}" placeholder="МЕСТО ...">
+                        </div>
+                        <div class="form-group mx-sm-3 mb-2">
+                            <select name="" id="dep_id" class="form-control">
+                                <option value="">Все</option>
                                 @foreach ($departments as $dep)
-                                    <option value="{{ $dep->id }}">{{ $dep->name }}</option>
+                                    <option value="{{ $dep->id }}" @if (request('dep_id') == $dep->id) selected @endif>
+                                        {{ $dep->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group mx-sm-3 mb-2">
-                            <select name="" id="" class="form-control">
+                            <select name="" id="num_id" class="form-control">
+                                <option value="">Все</option>
                                 @foreach ($numbers as $num)
-                                    <option value="{{ $num->id }}">{{ $num->fullname }}</option>
+                                    <option value="{{ $num->id }}" @if (request('num_id') == $num->id) selected @endif>
+                                        {{ $num->fullname }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <button type="button" class="btn  btn-primary mb-2" data-toggle="modal"
                             data-target="#exampleModalCenter"><i class="fa fa-plus mr-2"></i> Добавить реле
                         </button>
-                        <a type="button" href="{{ route('filter') }}" class="btn  btn-danger mb-2 ml-2"><i
-                                class="fa fa-filter mr-2"></i> Филтер</a>
+                        {{-- <a type="button" href="{{ route('filter') }}" class="btn  btn-danger mb-2 ml-2"><i
+                                class="fa fa-filter mr-2"></i> Филтер</a> --}}
                     </div>
                 </form>
 
@@ -142,12 +201,28 @@
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                         aria-labelledby="pills-home-tab">
                         <div class="table-responsive">
-                            <div class="customer-scroll" id="rec-table">
+                            <div id="rec-table">
                                 @include('includes.include-table')
                             </div>
                         </div>
+                        <div class="row ml-3 mr-3 mt-2 mb-2">
+                            <div class="col-md-3">
+                                {{-- <div class="d-flex justify-content-start">
+                                    <select name="" class="form-control" style="width: 100px" id="">
+                                        <option value="10">10</option>
+                                        <option value="10">20</option>
+                                        <option value="10">30</option>
+                                        <option value="10">100</option>
+                                    </select>
+                                </div> --}}
+                            </div>
+                            <div class="col">
+                                <div class="d-flex justify-content-end">
+                                    {{ $cadry->withQueryString()->links() }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {{ $cadry->withQueryString()->links() }}
                 </div>
             </div>
         </div>

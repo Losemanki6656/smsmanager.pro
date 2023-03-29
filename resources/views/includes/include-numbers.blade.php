@@ -1,21 +1,21 @@
 @if (count($numbers))  
-    <table class="table table-striped table-hover m-b-0">
+    <table class="table table-sm table-striped table-hover m-b-0">
         <thead>
             <tr>
                 <th width="60"><span>№</span></th>
                 <th><span>ФИО</span></th>
                 <th><span>Количество Реле</span></th>
                 <th width="250"><span>Дожность</span></th>
-                <th width="200"><span>Тел</span></th>
-                <th class="text-center" width="380"><span>Действии</span></th>
+                <th width="220"><span>Тел</span></th>
+                <th class="text-center" width="400"><span>Действии</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($numbers as $item)
                 <tr>
                 <td>{{$loop->index+1}}</td>
-                <td>{{$item->fullname}}</td>
-                <td>{{$item->relays->count()}}</td>
+                <td><strong>{{$item->fullname}}</strong></td>
+                <td><strong>{{$item->relays->count()}}</strong></td>
                 <td>{{$item->staff_name}}</td>
                 <td>{{$item->phone}}</td>
                 <td>

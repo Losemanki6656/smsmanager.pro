@@ -98,9 +98,9 @@
                                 </a>
                             </div>
                             <ul class="pro-body">
-                                <li><a href="user-profile.html" class="dropdown-item"><i class="feather icon-user"></i>
+                                <li><a href="#" class="dropdown-item"><i class="feather icon-user"></i>
                                         Profile</a></li>
-                                <li><a href="email_inbox.html" class="dropdown-item"><i
+                                <li><a href="#" class="dropdown-item"><i
                                             class="feather icon-mail"></i> My
                                         Messages</a></li>
                                 <li><a href="{{ route('logout') }}" class="dropdown-item"
@@ -136,6 +136,7 @@
     <script src="{{ asset('assets/js/bootstrap-select.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap-select.js') }}"></script>
     @yield('scripts')
+    @stack('scripts')
 </body>
 
 <!-- Mirrored from lite.codedthemes.com/gradient-able/bootstrap/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 06 Nov 2021 12:04:49 GMT -->

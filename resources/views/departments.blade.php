@@ -18,7 +18,7 @@
                     @csrf
                     <div class="form-inline">
                         <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control" id="name" placeholder="Поиск ...">
+                            <input type="text" class="form-control" id="name" name="search" value="{{request('search')}}" placeholder="Поиск ...">
                         </div>
                         <button type="button" class="btn  btn-primary mb-2" data-toggle="modal"
                             data-target="#exampleModalCenter"><i class="fa fa-plus mr-2"></i>Добавить станции</button>

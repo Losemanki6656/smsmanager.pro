@@ -1,5 +1,5 @@
 @if (count($departments))
-    <table class="table table-striped table-hover m-b-0">
+    <table class="table table-sm table-striped table-hover m-b-0">
         <thead>
             <tr>
                 <th width="60"><span>№</span></th>
@@ -7,17 +7,17 @@
                 <th><span>Количество Реле</span></th>
                 <th width="250"><span>Участка</span></th>
                 <th width="200"><span>Механик</span></th>
-                <th class="text-center" width="380"><span>Действие</span></th>
+                <th class="text-center" width="400"><span>Действие</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($departments as $item)
                 <tr>
-                    <td>{{ $loop->index + 1 }}</td>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->relays->count() }}</td>
+                    <td><strong>{{ $loop->index + 1 }}</strong></td>
+                    <td><strong>{{ $item->name }}</strong></td>
+                    <td><strong>{{ $item->relays->count() }}</strong></td>
                     <td>{{ $item->organization->name }}</td>
-                    <td>{{ $item->number->fullname }}</td>
+                    <td><strong>{{ $item->number->fullname }}</strong></td>
                     <td>
                         <a href="/" type="button" class="btn btn-sm btn-icon btn-outline-primary"><i class="fa fa-eye"></i> Просмотр </a>
                         <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" title="Edit" data-toggle="modal"

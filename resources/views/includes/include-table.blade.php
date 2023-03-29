@@ -1,26 +1,26 @@
 @if (count($cadry))
-    <table class="table table-striped table-hover m-b-0">
+    <table class="table table-sm m-b-0">
         <thead>
             <tr>
                 <th class="text-center" width="60"><span>№</span></th>
-                <th class="text-center"><span>Наиминование Реле</span></th>
+                <th class="text-center"><span>Имя</span></th>
                 <th class="text-center"><span>Пасспорт</span></th>
                 <th class="text-center"><span>Статив</span></th>
                 <th class="text-center"><span>Ряд</span></th>
                 <th class="text-center"><span>Место</span></th>
-                <th class="text-center"><span>Пред. Дата</span></th>
-                <th class="text-center"><span>След. Дата</span></th>
+                <th class="text-center" style="min-width: 150px"><span>Пред. Дата</span></th>
+                <th class="text-center" style="min-width: 150px"><span>След. Дата</span></th>
                 <th class="text-center"><span>Станция</span></th>
-                <th class="text-center"><span>Тел</span></th>
-                <th class="text-center" width="120"><span>Статус</span></th>
-                <th class="text-center" width="260"><span>Действие</span></th>
+                {{-- <th class="text-center" style="min-width: 210px"><span>Тел</span></th> --}}
+                <th class="text-center" style="min-width: 170px; max-width: 170px"><span>Статус</span></th>
+                <th class="text-center" style="min-width: 230px"><span>Действие</span></th>
             </tr>
         </thead>
         <tbody>
             @foreach ($cadry as $item)
                 <tr>
-                    <td class="text-center">{{ $loop->index + 1 }}</td>
-                    <td class="text-center">{{ $item->fullname }}</td>
+                    <td class="text-center">{{ $cadry->currentPage() * 10 - 10 + $loop->index + 1 }}</td>
+                    <td class="text-center"><strong>{{ $item->fullname }}</strong></td>
                     <td class="text-center">{{ $item->passport }}</td>
                     <td class="text-center">{{ $item->stativ }}</td>
                     <td class="text-center">{{ $item->rad }}</td>
@@ -28,15 +28,13 @@
                     <td class="text-center">{{ $item->last_date->format('d-m-Y') }}</td>
                     <td class="text-center">{{ $item->next_date->format('d-m-Y') }}</td>
                     <td class="text-center">{{ $item->department->name ?? '' }}</td>
-                    <td class="text-center">{{ $item->phone }}</td>
+                    {{-- <td class="text-center">{{ $item->phone }}</td> --}}
                     <td class="text-center">
                         @if ($item->next_date > now())
                             @if ($item->next_date->diffInDays() + 1 > 5)
-                                <span class="badge badge-primary"> {{ $item->next_date->diffInDays() + 1 }} дней
-                                    осталось </span>
+                                <span class="badge badge-primary"> {{ $item->next_date->diffInDays() + 1 }} дней </span>
                             @else
-                                <span class="badge badge-warning"> {{ $item->next_date->diffInDays() + 1 }} дней
-                                    осталось </span>
+                                <span class="badge badge-warning"> {{ $item->next_date->diffInDays() + 1 }} дней </span>
                             @endif
                         @else
                             <span class="badge badge-danger">Истек <span class="ms-1 fas fa-ban"
@@ -44,16 +42,16 @@
                         @endif
                     </td>
                     <td class="text-center">
-                        <button type="button" class="btn btn-icon btn-outline-success" title="Success"
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-success" title="Success"
                             data-toggle="modal" data-target="#succmodal{{ $item->id }}"><i
                                 class="fa fa-check"></i></button>
-                        <button type="button" class="btn btn-icon btn-outline-secondary" title="Edit"
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-secondary" title="Edit"
                             data-toggle="modal" data-target="#editmodal{{ $item->id }}"><i
                                 class="fa fa-edit"></i></button>
-                        <button type="button" class="btn btn-icon btn-outline-danger" title="Delete"
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-danger" title="Delete"
                             data-toggle="modal" data-target="#deletemodal{{ $item->id }}"><i
                                 class="fa fa-trash-alt"></i></button>
-                        <button type="button" class="btn  btn-icon btn-outline-primary" title="Send Sms"
+                        <button type="button" class="btn btn-sm btn-icon btn-outline-primary" title="Send Sms"
                             data-toggle="modal" data-target="#sendmodal{{ $item->id }}"><i
                                 class="fa fa-paper-plane"></i></button>
                     </td>
@@ -250,4 +248,5 @@
             @endforeach
         </tbody>
     </table>
+
 @endif

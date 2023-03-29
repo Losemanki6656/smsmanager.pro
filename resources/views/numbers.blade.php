@@ -17,7 +17,7 @@
                     @csrf
                     <div class="form-inline">
                         <div class="form-group mx-sm-3 mb-2">
-                            <input type="text" class="form-control" name="search" value="{{request()->query('search')}}" id="search" placeholder="Поиск ...">
+                            <input type="text" class="form-control" name="search" value="{{request('search')}}" id="search" placeholder="Поиск ...">
                         </div>
                         <button type="button" class="btn  btn-primary mb-2" data-toggle="modal"
                             data-target="#exampleModalCenter"><i class="fa fa-plus mr-2"></i>Добавить механик</button>
@@ -85,7 +85,7 @@
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
                         <div class="table-responsive">
-                            <div class="customer-scroll" id="rec-table">
+                            <div id="rec-table">
                                 @include('includes.include-numbers')
                             </div>
                         </div>
