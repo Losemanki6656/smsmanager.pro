@@ -1,5 +1,5 @@
 @if (count($archive))  
-    <table class="table table-striped table-hover m-b-0">
+    <table class="table table-sm table-striped table-hover m-b-0">
         <thead>
             <tr>
                 <th><span>№</span></th>

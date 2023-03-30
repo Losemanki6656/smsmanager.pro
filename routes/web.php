@@ -18,6 +18,7 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/archive', 'HomeController@archive')->name('archive');
 Route::get('/filter', 'HomeController@filter')->name('filter');
 Route::post('/add-worker', 'HomeController@add_worker')->name('add_worker');
 Route::post('/add-number', 'HomeController@add_number')->name('add_number');
@@ -26,7 +27,6 @@ Route::get('/edit-user', 'HomeController@edit_user')->name('edit_user');
 Route::get('/edit-number', 'HomeController@edit_number')->name('edit_number');
 Route::get('/delete-user', 'HomeController@delete_user')->name('delete_user');
 Route::get('/send-message-user', 'HomeController@send_message')->name('send_message');
-Route::get('/archive', 'HomeController@archive')->name('archive');
 Route::get('/smstoken', 'HomeController@smstoken')->name('smstoken');
 Route::get('/commentrelays', 'HomeController@commentsrelay')->name('commentrelays');
 Route::get('/numbers', 'HomeController@numbers')->name('numbers');

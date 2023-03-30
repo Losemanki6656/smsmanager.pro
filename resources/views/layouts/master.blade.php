@@ -48,6 +48,11 @@
                                     class="fa fa-phone-square"></i></span><span
                                 class="pcoded-mtext">Участки</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('archive') }}" class="nav-link "><span class="pcoded-micon"><i
+                                    class="fa fa-archive"></i></span><span
+                                class="pcoded-mtext">Архив</span></a>
+                    </li>
                     {{-- <li class="nav-item">
                         <a href="{{ route('archive') }}" class="nav-link "><span class="pcoded-micon"><i
                                     class="fa fa-check"></i></span><span class="pcoded-mtext">Архив</span></a>
